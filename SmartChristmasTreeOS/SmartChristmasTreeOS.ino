@@ -52,15 +52,15 @@ void ChangePalettePeriodically()
     if(lastSecond != secondHand)
     {
         lastSecond = secondHand;
-        
+
         if(secondHand ==  0)
-        {
-            currentPalette = RainbowColors_p;
-            currentBlending = LINEARBLEND;
-        }
-        if(secondHand ==  5)
         { 
             SetupBlueAndYellowStripedPalette();
+            currentBlending = NOBLEND;
+        }
+        if(secondHand ==  5)
+        {
+            currentPalette = RainbowColors_p;
             currentBlending = LINEARBLEND;
         }
         if(secondHand == 10)
@@ -95,22 +95,22 @@ void ChangePalettePeriodically()
         }
         if(secondHand == 40)
         {
-            currentPalette = CloudColors_p;
+            SetupWhiteAndYellowStripedPalette();
             currentBlending = LINEARBLEND;
         }
         if(secondHand == 45)
+        {
+            currentPalette = CloudColors_p;
+            currentBlending = LINEARBLEND;
+        }
+        if(secondHand == 50)
         { 
             currentPalette = PartyColors_p;
             currentBlending = LINEARBLEND;
         }
-        if(secondHand == 50)
-        {
-            currentPalette = myRedWhiteBluePalette_p;
-            currentBlending = LINEARBLEND;
-        }
         if(secondHand == 55)
         {
-            SetupYellowPalette();
+            currentPalette = myRedWhiteBluePalette_p;
             currentBlending = LINEARBLEND;
         }
     }
@@ -133,9 +133,13 @@ void SetupBlackAndWhiteStripedPalette()
     currentPalette[12] = CRGB::White;
 }
 
-void SetupYellowPalette()
+void SetupWhiteAndYellowStripedPalette()
 {
     fill_solid(currentPalette, 16, CRGB(248, 178, 41));
+    currentPalette[0] = CRGB::White;
+    currentPalette[4] = CRGB::White;
+    currentPalette[8] = CRGB::White;
+    currentPalette[12] = CRGB::White;
 }
 
 void SetupBlueAndYellowStripedPalette()

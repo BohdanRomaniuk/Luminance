@@ -1,8 +1,8 @@
+#ifndef CaptivePortal
+#define CaptivePortal
 #define CAPTIVE_PORTAL_NAME "Luminance Config"
 #define CAPTIVE_PORTAL_IP 192,168,1,1
 
-#ifndef CaptivePortal
-#define CaptivePortal
 #include <DNSServer.h>
 #include <WiFi.h>
 #include <WebServer.h>

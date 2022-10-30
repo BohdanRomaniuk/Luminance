@@ -1,27 +1,18 @@
 #include <FastLED.h>
+#include <WiFi.h>
+#include <WebServer.h>
 #include <ArduinoJson.h>
 #include "config.h"
-#include "captive_portal.h"
 #include "startup.h"
 
 WebServer server(80);
-IPAddress ipAddress;
-
 CRGB leds[LED_MAX];
 
 void setup() {
 #ifdef IS_DEBUG_MODE
   Serial.begin(9600);
 #endif
-  LOG("App starting...");
-  startCaptivePortal();
-  while(!isCaptivePortalConfigured())
-  {
-    LOG("Waiting for user");
-  }
-
-  ipAddress = isAccessPoint() ? setupAcessPoint() : setupStationMode();
-  LOG(ipAddress);
+  onStartup();
 
   server.on("/", HTTP_GET, getAppInfo);
   server.onNotFound(onNotFound);

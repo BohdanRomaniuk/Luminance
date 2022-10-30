@@ -2,8 +2,17 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <ArduinoJson.h>
-#include "config.h"
+#include "log.h"
 #include "startup.h"
+
+#define APPLICATION_VERSION 0.1
+
+#define LED_PIN 2
+#define LED_TYPE WS2812
+#define LED_ORDER GRB
+#define LED_MAX 500
+
+#define IS_DEBUG_MODE //Debuging
 
 WebServer server(80);
 CRGB leds[LED_MAX];

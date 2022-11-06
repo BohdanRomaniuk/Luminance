@@ -2,8 +2,8 @@
 #include <vector>
 
 const int patternBase = 3;
-const int length = 8;
-const int count = 100;
+const int length = 8; // 8 - <=150, 10 - (150-850)
+const int count = 150;
 std::vector<int*> lst;
 
 const int* zeroOne = new int[2] { 0, 1};
@@ -120,30 +120,35 @@ bool alreadyExists(int* arr)
 int main()
 {
 	srand(time(NULL));
-	int* initial = new int[length];
-	for (int i = 0; i < length; ++i)
-	{
-		initial[i] = i % patternBase;
-	}
-	lst.push_back(initial);
-	print(0, initial);
 
-	int failCount = 0;
-
-	for (int i = 1; i < count; ++i)
+	for (int k = 0; k < 1; ++k)
 	{
-		int* next = generateNext(initial);
-		if (alreadyExists(next))
+		lst.clear();
+		int* initial = new int[length];
+		for (int i = 0; i < length; ++i)
 		{
-			--i;
-			++failCount;
-			continue;
+			initial[i] = i % patternBase;
+		}
+		lst.push_back(initial);
+		print(0, initial);
+
+		int failCount = 0;
+
+		for (int i = 1; i < count; ++i)
+		{
+			int* next = generateNext(initial);
+			if (alreadyExists(next))
+			{
+				--i;
+				++failCount;
+				continue;
+			}
+
+			lst.push_back(next);
+			initial = next;
+			print(i, initial);
 		}
 
-		lst.push_back(next);
-		initial = next;
-		print(i, initial);
+		std::cout << "Failed count: " << failCount << std::endl;
 	}
-
-	std::cout << "Failed count: " << failCount << std::endl;
 }

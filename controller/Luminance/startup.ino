@@ -1,15 +1,12 @@
-#include "startup.h"
-
-IPAddress appIpAdress;
+#include "captive_portal.h"
 
 void onStartup()
 {
   LOG("App starting...");
   startCaptivePortal();
-  while(!isCaptivePortalConfigured())
+  while(!isCaptivePortalConfigured()) // Waiting for user interaction
   {
-    //TODO: Blink with blue color
-    LOG("Waiting for user");
+    fader(CRGB::Cyan);
   }
 
   appIpAdress = isAccessPoint() ? setupAcessPoint() : setupStationMode();
@@ -21,7 +18,7 @@ IPAddress setupAcessPoint() {
   WiFi.disconnect();
   WiFi.mode(WIFI_AP);
   WiFi.softAP(APPLICATION_NAME, ACESS_POINT_PASS);
-  //TODO: Blink with green color
+  fadeBlink(CRGB::Green);
 
   return WiFi.softAPIP();
 }
@@ -38,14 +35,14 @@ IPAddress setupStationMode() {
   while (millis() - timer < 15000) {
     if (WiFi.status() == WL_CONNECTED) {
       LOG("Connected to wifi network successfuly");
-      //TODO: Blink with green color
+      fadeBlink(CRGB::Green); //TODO: Blink with green color
 
       return WiFi.localIP();
     }
-    //TODO: Blink with yellow color
+    fader(CRGB::Yellow); //TODO: Blink with yellow color
     yield();
   }
-  //TODO: Blink with red color
+  fader(CRGB::Red); //TODO: Blink with red color
   LOG("Failed connecting to Wifi");
 
   return setupAcessPoint();

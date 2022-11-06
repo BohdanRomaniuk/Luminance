@@ -14,7 +14,7 @@ const char contentPage[] PROGMEM = R"rawliteral(
 <center>
 <h3>WiFi налаштування</h3>
 <form action="/connect" method="POST">
-    <input type="text" name="ssid" placeholder="Назва Wifi">
+    <input type="text" name="ssid" placeholder="SSID">
     <input type="password" name="password" placeholder="Пароль">
     <input type="submit" value="Підключитися">
 </form>

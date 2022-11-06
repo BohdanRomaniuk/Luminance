@@ -4,8 +4,17 @@
              xmlns:c="clr-namespace:Luminance.CameraView"
              x:Class="Luminance.Pages.SettingsPage"
              Title="Налаштування">
-    <Grid>
-        <c:CameraView IsTorchOn="True" FrameReady="CameraView_FrameReady" />
-        
+
+    <Grid RowDefinitions="3*,1*">
+        <c:CameraView  Grid.Row="0"  x:Name="camera" FrameReady="CameraView_FrameReady" />
+        <Grid
+			Grid.Row="3"
+			ColumnDefinitions="Auto,*,Auto">
+
+            <Button Text="🔄️" Grid.Column="0" BackgroundColor="#aa000000" CornerRadius="8" BorderColor="Black" Clicked="SwitchCameraButton_Clicked" />
+
+            <Button Text="💡" Grid.Column="2" BackgroundColor="#aa000000" CornerRadius="8" BorderColor="Black" Clicked="TorchButton_Clicked" />
+        </Grid>
+
     </Grid>
 </ContentPage>

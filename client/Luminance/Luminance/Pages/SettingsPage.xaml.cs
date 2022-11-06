@@ -8,6 +8,8 @@ public partial class SettingsPage : ContentPage
 		InitializeComponent();
 	}
 
-   
+	private void CameraView_FrameReady(object sender, CameraView.CameraFrameBufferEventArgs e)
+	{
 
+	}
 }

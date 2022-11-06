@@ -1,10 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFrameworks>net6.0-android;net6.0-ios;net6.0-maccatalyst</TargetFrameworks>
-		<TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net6.0-windows10.0.19041.0</TargetFrameworks>
-		<!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
-		<!-- <TargetFrameworks>$(TargetFrameworks);net6.0-tizen</TargetFrameworks> -->
+		<TargetFrameworks>net6.0-android;net6.0-ios;</TargetFrameworks>
 		<OutputType>Exe</OutputType>
 		<RootNamespace>Luminance</RootNamespace>
 		<UseMaui>true</UseMaui>
@@ -15,7 +12,7 @@
 		<ApplicationTitle>Luminance</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.luminance</ApplicationId>
+		<ApplicationId>com.bohdan.luminance</ApplicationId>
 		<ApplicationIdGuid>5620622C-43CA-4BFF-8E8C-0AC7EFE3E1E0</ApplicationIdGuid>
 
 		<!-- Versions -->
@@ -49,6 +46,15 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <AndroidResource Remove="Views\**" />
+	  <Compile Remove="Views\**" />
+	  <EmbeddedResource Remove="Views\**" />
+	  <MauiCss Remove="Views\**" />
+	  <MauiXaml Remove="Views\**" />
+	  <None Remove="Views\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <None Remove="Resources\Images\gallery.svg" />
 	  <None Remove="Resources\Images\magic_wand.svg" />
 	  <None Remove="Resources\Images\mapping.svg" />
@@ -57,7 +63,10 @@
 
 	<ItemGroup>
 	  <Folder Include="Models\" />
-	  <Folder Include="Views\" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Maui.Graphics" Version="6.0.501" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -70,6 +79,24 @@
 	  <MauiXaml Update="Pages\SettingsPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
+	</ItemGroup>
+
+	<ItemGroup Condition="'$(TargetFramework)' == 'net6.0-android'">
+	  <PackageReference Include="Xamarin.AndroidX.Camera.Camera2">
+	    <Version>1.1.0.1</Version>
+	  </PackageReference>
+	  <PackageReference Include="Xamarin.AndroidX.Camera.Lifecycle">
+	    <Version>1.1.0.1</Version>
+	  </PackageReference>
+	  <PackageReference Include="Xamarin.AndroidX.Camera.View">
+	    <Version>1.1.0.1</Version>
+	  </PackageReference>
+	  <PackageReference Include="Xamarin.AndroidX.Core">
+	    <Version>1.9.0.1</Version>
+	  </PackageReference>
+	  <PackageReference Include="Xamarin.Google.Guava.ListenableFuture">
+	    <Version>1.0.0.10</Version>
+	  </PackageReference>
 	</ItemGroup>
 
 </Project>

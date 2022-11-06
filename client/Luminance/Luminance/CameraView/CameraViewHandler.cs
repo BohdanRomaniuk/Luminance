@@ -51,6 +51,11 @@ namespace Luminance.CameraView
         void CameraManager_FrameReady(object sender, CameraFrameBufferEventArgs e)
             => FrameReady?.Invoke(this, e);
 
+        //private void CameraManager_FrameReady(object sender, CameraFrameBufferEventArgs e)
+        //{
+        //    VirtualView?.FrameReady(e);
+        //}
+
         protected override void DisconnectHandler(NativePlatformCameraPreviewView nativeView)
         {
             cameraManager.FrameReady -= CameraManager_FrameReady;

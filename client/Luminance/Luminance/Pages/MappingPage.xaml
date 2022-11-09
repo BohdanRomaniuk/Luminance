@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:c="clr-namespace:Luminance.CameraView"
              x:Class="Luminance.Pages.MappingPage"
              Title="Сканування">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <Grid RowDefinitions="3*,1*">
+        <c:CameraView  Grid.Row="0"  x:Name="camera" FrameReady="CameraView_FrameReady" />
+        <Grid
+			Grid.Row="3"
+			ColumnDefinitions="Auto,*,Auto">
+
+            <Button Text="🔄️" Grid.Column="0" BackgroundColor="#aa000000" CornerRadius="8" BorderColor="Black" Clicked="SwitchCameraButton_Clicked" />
+
+            <Button Text="💡" Grid.Column="2" BackgroundColor="#aa000000" CornerRadius="8" BorderColor="Black" Clicked="TorchButton_Clicked" />
+        </Grid>
+
+    </Grid>
 </ContentPage>

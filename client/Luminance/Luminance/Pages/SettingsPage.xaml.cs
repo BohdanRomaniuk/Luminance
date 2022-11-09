@@ -10,18 +10,20 @@ public partial class SettingsPage : ContentPage
 		InitializeComponent();
 	}
 
-	private void CameraView_FrameReady(object sender, CameraView.CameraFrameBufferEventArgs e)
-	{
+	
 
-	}
-
-    void SwitchCameraButton_Clicked(object sender, EventArgs e)
+    private void Slider_ValueChanged(System.Object sender, Microsoft.Maui.Controls.ValueChangedEventArgs e)
     {
-        camera.CameraLocation = camera.CameraLocation == CameraLocation.Rear ? CameraLocation.Front : CameraLocation.Rear;
+
     }
 
-    void TorchButton_Clicked(object sender, EventArgs e)
+    private void Slider_ValueChanged_1(System.Object sender, Microsoft.Maui.Controls.ValueChangedEventArgs e)
     {
-        camera.IsTorchOn = !camera.IsTorchOn;
+
+    }
+
+    private void Slider_ValueChanged_2(System.Object sender, Microsoft.Maui.Controls.ValueChangedEventArgs e)
+    {
+
     }
 }

@@ -66,6 +66,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="Emgu.CV" Version="4.6.0.5131" />
+	  <PackageReference Include="Emgu.CV.Bitmap" Version="4.6.0.5131" />
 	  <PackageReference Include="Microsoft.Maui.Graphics" Version="6.0.501" />
 	</ItemGroup>
 

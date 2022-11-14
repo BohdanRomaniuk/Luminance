@@ -13,7 +13,7 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Button Text="Вибрати" />
+        <Button Text="Вибрати" Clicked="Button_Clicked" />
         <Slider Minimum="0" Maximum="255" ValueChanged="Slider_ValueChanged" Grid.Row="1" />
         <Slider Minimum="0" Maximum="255" ValueChanged="Slider_ValueChanged_1" Grid.Row="2" />
         <Slider Minimum="0" Maximum="255" ValueChanged="Slider_ValueChanged_2" Grid.Row="3" />

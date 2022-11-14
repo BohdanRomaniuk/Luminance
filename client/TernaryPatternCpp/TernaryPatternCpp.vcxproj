@@ -127,7 +127,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="TernaryPatternCpp.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="ternary_pattern.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ternary_pattern.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

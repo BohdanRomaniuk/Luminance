@@ -3,6 +3,11 @@
 void onStartup()
 {
   LOG("App starting...");
+#ifdef SKIP_CAPTIVE_PORTAL
+  strcpy(captivePortalConfig.SSID, "Oasis 2.0 Guest");
+  strcpy(captivePortalConfig.password, "789456123");
+  appIpAdress = setupStationMode();
+#else
   startCaptivePortal();
   while(!isCaptivePortalConfigured()) // Waiting for user interaction
   {
@@ -10,6 +15,8 @@ void onStartup()
   }
 
   appIpAdress = isAccessPoint() ? setupAcessPoint() : setupStationMode();
+#endif
+  
   LOG(appIpAdress);
 }
 

@@ -1,5 +1,4 @@
-#ifndef TernaryPatternHeader
-#define TernaryPatternHeader
+#pragma once
 
 class TernaryPattern
 {
@@ -30,6 +29,5 @@ public:
 
   int* getPatternDecimal();
   int getFrameColor(int ledNum, int position);
+  int getPatternLength();
 };
-
-#endif

@@ -17,6 +17,8 @@ private:
   TernaryPattern* _pattern;
   Effects* _effects;
 
+  void showFrame(int id);
+
   void getAppInfo();
   void setBrightness();
   void startMapping();

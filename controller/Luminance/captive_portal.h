@@ -1,5 +1,6 @@
-#ifndef CaptivePortal
-#define CaptivePortal
+#ifndef CaptivePortalHeader
+#define CaptivePortalHeader
+
 #define CAPTIVE_PORTAL_NAME "Luminance Config"
 #define CAPTIVE_PORTAL_IP 192,168,1,1
 
@@ -26,4 +27,5 @@ byte getCaptivePortalStatus();
 
 void handleWifiConnect();
 void handleAccessPointConnect();
+
 #endif

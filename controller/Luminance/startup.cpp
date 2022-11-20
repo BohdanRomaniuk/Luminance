@@ -1,17 +1,22 @@
-#include "captive_portal.h"
+#include "startup.h"
 
-void onStartup()
+Startup::Startup(Effects* effects)
+{
+  _effects = effects;
+}
+
+void Startup::onStartup()
 {
   LOG("App starting...");
 #ifdef SKIP_CAPTIVE_PORTAL
-  strcpy(captivePortalConfig.SSID, "Oasis 2.0 Guest");
-  strcpy(captivePortalConfig.password, "789456123");
+  strcpy(captivePortalConfig.SSID, OPEN_WIFI_SSID);
+  strcpy(captivePortalConfig.password, OPEN_WIFI_PASS);
   appIpAdress = setupStationMode();
 #else
   startCaptivePortal();
   while(!isCaptivePortalConfigured()) // Waiting for user interaction
   {
-    fader(CRGB::Cyan);
+    _effects->fader(CRGB::Cyan);
   }
 
   appIpAdress = isAccessPoint() ? setupAcessPoint() : setupStationMode();
@@ -20,17 +25,17 @@ void onStartup()
   LOG(appIpAdress);
 }
 
-IPAddress setupAcessPoint() {
+IPAddress Startup::setupAcessPoint() {
   LOG("Acess Point Mode");
   WiFi.disconnect();
   WiFi.mode(WIFI_AP);
   WiFi.softAP(APPLICATION_NAME, ACESS_POINT_PASS);
-  fadeBlink(CRGB::Green);
+  _effects->fadeBlink(CRGB::Green);
 
   return WiFi.softAPIP();
 }
 
-IPAddress setupStationMode() {
+IPAddress Startup::setupStationMode() {
   LOG("Station Mode");
   WiFi.softAPdisconnect();
   WiFi.disconnect();
@@ -42,14 +47,14 @@ IPAddress setupStationMode() {
   while (millis() - timer < 15000) {
     if (WiFi.status() == WL_CONNECTED) {
       LOG("Connected to wifi network successfuly");
-      fadeBlink(CRGB::Green); //TODO: Blink with green color
+      _effects->fadeBlink(CRGB::Green);
 
       return WiFi.localIP();
     }
-    fader(CRGB::Yellow); //TODO: Blink with yellow color
+    _effects->fader(CRGB::Yellow);
     yield();
   }
-  fader(CRGB::Red); //TODO: Blink with red color
+  _effects->fader(CRGB::Red);
   LOG("Failed connecting to Wifi");
 
   return setupAcessPoint();

@@ -37,9 +37,18 @@ void LedController::initStrip() {
 
 void LedController::showFrame(int id) {
   for (int i = 0; i < LED_MAX; ++i) {
-    int color = _pattern->getFrameColor(i, id);
-    _leds[i] = color == 0 ? CRGB::Red : color == 1 ? CRGB::Green
-                                                   : CRGB::Blue;
+    switch (_pattern->getFrameColor(i, id)) {
+      default:
+      case 0:
+        _leds[i] = CRGB::Red;
+        break;
+      case 1:
+        _leds[i] = CRGB::Green;
+        break;
+      case 2:
+        _leds[i] = CRGB::Blue;
+        break;
+    }
   }
   _strip->showLeds(LED_MAX);
 }

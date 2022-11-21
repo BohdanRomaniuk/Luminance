@@ -12,19 +12,105 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <Slider Minimum="0" Maximum="255" ValueChanged="Slider_ValueChanged" Margin="3" />
-        <Slider Minimum="250" Maximum="255" ValueChanged="Slider_ValueChanged_1" Margin="3" Grid.Row="1" />
-        <Slider Minimum="250" Maximum="255" ValueChanged="Slider_ValueChanged_2" Margin="3" Grid.Row="2" />
-        <Slider Minimum="250" Maximum="255" ValueChanged="Slider_ValueChanged_3" Margin="3" Grid.Row="3" />
-        <Grid Grid.Row="4">
+        <!--<Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Gray" />
+            <Slider Minimum="0" Maximum="255" Value="{Binding GrayThreshold}" Margin="3" Grid.Column="1" />
+            
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="R" />
+            <Slider Minimum="0" Maximum="255" Value="{Binding RedThreshold}" Margin="3" Grid.Column="1" />
+            
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="G" />
+            <Slider Minimum="0" Maximum="255" Value="{Binding GreenThreshold}" Margin="3" Grid.Column="1" />
+            
+        </Grid>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="B" />
+            <Slider Minimum="0" Maximum="255" Value="{Binding BlueThreshold}" Margin="3" Grid.Column="1" />
+        </Grid>-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button Content="Contour detection" Margin="3" Command="{Binding ContourDetectionCommand}" />
+            <Label Content="Found:" FontWeight="Bold" Grid.Column="1" />
+            <Label Content="{Binding FoundContoursCount}" Grid.Column="2" />
+            <Label Content="Filter by color:" FontWeight="Bold" Grid.Column="3" />
+            <CheckBox IsChecked="{Binding FilterByColor}" Grid.Column="4" />
+        </Grid>
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Color" />
+            <Slider Minimum="0" Maximum="255" Value="{Binding Color}" Margin="3" Grid.Column="1" />
+        </Grid>
+        <Grid Grid.Row="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Dist" />
+            <Slider Minimum="0" Maximum="1000" Value="{Binding MinDist}" Margin="3" Grid.Column="1" />
+        </Grid>
+        <Grid Grid.Row="6">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Min" />
+            <Slider Minimum="0" Maximum="1000" Value="{Binding MinArea}" Margin="3" Grid.Column="1" />
+        </Grid>
+        <Grid Grid.Row="7">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Max" />
+            <Slider Minimum="0" Maximum="1000" Value="{Binding MaxArea}" Margin="3" Grid.Column="1" />
+        </Grid>
+        <Grid Grid.Row="10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <Image x:Name="sourceImage" />
-            <Image x:Name="resultImage" Grid.Column="1" />
+            <Image Source="{Binding ResultImage}" MaxHeight="920" Grid.Column="1" />
         </Grid>
     </Grid>
 </Window>

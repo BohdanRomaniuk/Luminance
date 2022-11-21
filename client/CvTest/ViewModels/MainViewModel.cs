@@ -4,8 +4,10 @@ using Emgu.CV.Linemod;
 using Emgu.CV.Structure;
 using Emgu.CV.Util;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
@@ -79,7 +81,7 @@ namespace CvTest.ViewModels
 
         public float MaxArea
         {
-            get=> _maxArea;
+            get => _maxArea;
             set
             {
                 _maxArea = value;
@@ -94,7 +96,7 @@ namespace CvTest.ViewModels
             {
                 _minDist = value;
                 Detector();
-            }   
+            }
         }
 
         public bool FilterByColor
@@ -185,6 +187,7 @@ namespace CvTest.ViewModels
 
             var result = detector.Detect(SourceImage);
             FoundContoursCount = result?.Length ?? 0;
+            var points = result?.Select(x => new Point(x.Point.X, x.Point.Y, x.Size)).ToArray();
 
             Mat outimg = new Mat();
             Features2DToolbox.DrawKeypoints(SourceImage, new VectorOfKeyPoint(result), outimg, new Bgr(0, 0, 0), Features2DToolbox.KeypointDrawType.DrawRichKeypoints);
@@ -230,5 +233,19 @@ namespace CvTest.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+    }
+
+    public class Point
+    {
+        public float X { get; set; }
+        public float Y { get; set; }
+        public float Size { get; set; }
+
+        public Point(float x, float y, float size)
+        {
+            X = x;
+            Y = y;
+            Size = size;
+        }
     }
 }

@@ -97,7 +97,7 @@ void LedController::startMapping() {
 
 void LedController::getFrame() {
   int id = _server->arg("id") == "" ? -1 : _server->arg("id").toInt();
-  if (_pattern == nullptr || id == -1 || id >= _pattern->getPatternLength()) {
+  if (_pattern == nullptr || id < 0 || id >= _pattern->getPatternLength()) {
     _server->send(200, "application/json", "{\"success\":false}");
     return;
   }

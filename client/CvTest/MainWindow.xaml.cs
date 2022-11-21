@@ -20,36 +20,71 @@ namespace CvTest
 {
     public partial class MainWindow : Window
     {
+        private Image<Gray, byte> graySource;
+        private Image<Bgr, byte> source;
+        private double Blue_threshold;
+        private double Green_threshold;
+        private double Red_threshold;
+
         public MainWindow()
         {
             InitializeComponent();
-        }
-
-        Image<Gray, byte> source;
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            var open = new OpenFileDialog();
-            open.Filter = "Image Files (*.tif; *.dcm; *.jpg; *.jpeg; *.bmp)|*.tif; *.dcm; *.jpg; *.jpeg; *.bmp";
-            var threshold_value = 50;
-            if (open.ShowDialog() == true)
-            {
-                sourceImage.Source = new BitmapImage(new Uri(open.FileName));
-                source = new Image<Gray, byte>(open.FileName);
-                var img = source.ThresholdBinary(new Gray(threshold_value), new Gray(255));
-                resultImage.Source = img.ToBitmapSource();
-            }
+            var fileName = "C:/2.jpg";
+            sourceImage.Source = new BitmapImage(new Uri(fileName));
+            source = new Image<Bgr, byte>(fileName);
+            graySource = new Image<Gray, byte>(fileName);
         }
 
         private void Slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (source != null)
+            if (source == null)
             {
-                using (var Gray = source.ThresholdBinary(new Gray(e.NewValue), new Gray(255)))
-                {
-                    resultImage.Source = Gray.ToBitmapSource();
-                }
+                return;
             }
+
+            var result = graySource.ThresholdBinary(new Gray(e.NewValue), new Gray(255));
+            resultImage.Source = result.ToBitmapSource();
+        }
+
+        private void Slider_ValueChanged_1(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (source == null)
+            {
+                return;
+            }
+
+            Red_threshold = e.NewValue;
+            RgbThreashold();
+        }
+
+        private void Slider_ValueChanged_2(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (source == null)
+            {
+                return;
+            }
+
+            Green_threshold = e.NewValue;
+            RgbThreashold();
+        }
+
+        private void Slider_ValueChanged_3(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (source == null)
+            {
+                return;
+            }
+
+            Blue_threshold = e.NewValue;
+            RgbThreashold();
+        }
+
+        private void RgbThreashold()
+        {
+            using var result = source.ThresholdBinary(new Bgr(Blue_threshold, Green_threshold, Red_threshold),
+                new Bgr(255, 255, 255));
+
+            resultImage.Source = result.ToBitmapSource();
         }
     }
 }

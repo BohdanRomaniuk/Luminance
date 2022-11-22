@@ -1,4 +1,5 @@
 ﻿using Emgu.CV;
+using Emgu.CV.CvEnum;
 using Emgu.CV.Features2D;
 using Emgu.CV.Linemod;
 using Emgu.CV.Structure;
@@ -8,7 +9,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Net;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
@@ -186,13 +189,42 @@ namespace CvTest.ViewModels
             var detector = new SimpleBlobDetector(detectorParams);
 
             var result = detector.Detect(SourceImage);
+            var outImg = SourceImage.Clone();
+
+            var black = new MCvScalar(0, 0, 0);
+            var white = new MCvScalar(255, 255, 255);
+            var textColor = new MCvScalar(0, 255, 255);
+            foreach (var point in result)
+            {
+                //TODO: Round correctly
+                var x = (int)point.Point.X;
+                var y = (int)point.Point.Y;
+                var size = (int)point.Size;
+                var radius = size / 2;
+
+                SourceImage.ROI = new Rectangle(x - radius, y - radius, size, size);
+                var cuttedImage = SourceImage.Copy();
+                var mask = new Image<Gray, byte>(size, size);
+                CvInvoke.Circle(mask, new Point(radius, radius), radius, white, -1, LineType.AntiAlias, 0);
+
+                var mean = CvInvoke.Mean(cuttedImage, mask);
+                var b = mean.V0;
+                var g = mean.V1;
+                var r = mean.V2;
+                var text = r > g && r > b ? "R" : b > g && b > r ? "B" : g > r && g > b ? "G" : "N/A";
+
+                CvInvoke.Circle(outImg, new Point(x, y), radius, black, 2);
+                CvInvoke.PutText(outImg, text, new Point(x, y + 2 * size), FontFace.HersheySimplex, 1.0, black, 8);
+                CvInvoke.PutText(outImg, text, new Point(x, y + 2 * size), FontFace.HersheySimplex, 1.0, textColor, 2);
+            }
+
             FoundContoursCount = result?.Length ?? 0;
-            var points = result?.Select(x => new Point(x.Point.X, x.Point.Y, x.Size)).ToArray();
 
-            Mat outimg = new Mat();
-            Features2DToolbox.DrawKeypoints(SourceImage, new VectorOfKeyPoint(result), outimg, new Bgr(0, 0, 0), Features2DToolbox.KeypointDrawType.DrawRichKeypoints);
+            //Old method to draw contours
+            //Mat outimg = new Mat();
+            //Features2DToolbox.DrawKeypoints(SourceImage, new VectorOfKeyPoint(result), outimg, new Bgr(0, 0, 0), Features2DToolbox.KeypointDrawType.DrawRichKeypoints);
 
-            ResultImage = outimg.ToBitmapSource();
+            ResultImage = outImg.ToBitmapSource();
         }
 
         private void ContourDetection(object param)
@@ -233,19 +265,5 @@ namespace CvTest.ViewModels
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
-    public class Point
-    {
-        public float X { get; set; }
-        public float Y { get; set; }
-        public float Size { get; set; }
-
-        public Point(float x, float y, float size)
-        {
-            X = x;
-            Y = y;
-            Size = size;
-        }
     }
 }

@@ -212,6 +212,7 @@ namespace CvTest.ViewModels
                 var g = mean.V1;
                 var r = mean.V2;
                 var text = r > g && r > b ? "R" : b > g && b > r ? "B" : g > r && g > b ? "G" : "N/A";
+                //text += $" [{x}, {y}]";
 
                 CvInvoke.Circle(outImg, new Point(x, y), radius, black, 2);
                 CvInvoke.PutText(outImg, text, new Point(x, y + 2 * size), FontFace.HersheySimplex, 1.0, black, 8);

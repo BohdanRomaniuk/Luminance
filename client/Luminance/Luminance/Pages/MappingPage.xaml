@@ -9,6 +9,7 @@
             <cam:CameraView
                 x:Name="camera"
                 MediaCaptured="MediaCaptured"
+                FrameReady="FrameReady"
                 HorizontalOptions="FillAndExpand"
                 VerticalOptions="FillAndExpand" />
 

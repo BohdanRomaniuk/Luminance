@@ -9,7 +9,7 @@ public partial class MappingPage : ContentPage
         InitializeComponent();
     }
 
-    private void CameraView_FrameReady(object sender, CameraView.CameraFrameBufferEventArgs e)
+    private void FrameReady(object sender, CameraView.CameraFrameBufferEventArgs e)
     {
 
     }

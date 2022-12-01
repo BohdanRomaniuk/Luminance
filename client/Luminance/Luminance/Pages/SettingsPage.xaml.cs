@@ -17,7 +17,7 @@ public partial class SettingsPage : ContentPage
     {
         try
         {
-            CvInvokeAndroid.Init();
+            //CvInvokeAndroid.Init();
 
             var source = new Image<Gray, byte>(120, 120);
         }

@@ -26,4 +26,8 @@
 #define VOLTAGE 5
 #define CURRENT_LIMIT 1000  //Maximum current in mA
 
+#define WEB_SERVER_PORT 81
+#define UDP_SERVER_PORT 8888
+#define UDP_PACKET_SIZE 30
+
 #endif

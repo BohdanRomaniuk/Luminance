@@ -3,6 +3,8 @@ using AndroidX.Camera.Lifecycle;
 using AndroidX.Camera.View;
 using AndroidX.Core.Content;
 using Java.Util.Concurrent;
+using static Android.App.Usage.NetworkStatsManager;
+using static Android.Media.Image;
 
 namespace Luminance.CameraView
 {
@@ -15,9 +17,12 @@ namespace Luminance.CameraView
         CameraSelector cameraSelector = null;
         ProcessCameraProvider cameraProvider;
         ICamera camera;
+        ImageCapture? imageCapture;
+        ImageCallBack imageCallback;
 
         public NativePlatformCameraPreviewView CreateNativeView()
         {
+            imageCallback = new ImageCallBack(CameraView);
             previewView = new PreviewView(Context.Context);
             cameraExecutor = Executors.NewSingleThreadExecutor();
 
@@ -45,6 +50,9 @@ namespace Luminance.CameraView
 
                 imageAnalyzer.SetAnalyzer(cameraExecutor, new FrameAnalyzer((buffer, size) =>
                     FrameReady?.Invoke(this, new CameraFrameBufferEventArgs(new PixelBufferHolder { Data = buffer, Size = size }))));
+
+                imageCapture = new ImageCapture.Builder().SetCaptureMode(ImageCapture.CaptureModeMaximizeQuality).Build();
+                imageCapture.FlashMode = ImageCapture.FlashModeOff;
 
                 UpdateCamera();
 
@@ -77,14 +85,19 @@ namespace Luminance.CameraView
                 // The Context here SHOULD be something that's a lifecycle owner
                 if (Context.Context is AndroidX.Lifecycle.ILifecycleOwner lifecycleOwner)
                 {
-                    camera = cameraProvider.BindToLifecycle(lifecycleOwner, cameraSelector, cameraPreview, imageAnalyzer);
+                    camera = cameraProvider.BindToLifecycle(lifecycleOwner, cameraSelector, cameraPreview, imageAnalyzer, imageCapture);
                 }
                 else if (Microsoft.Maui.ApplicationModel.Platform.CurrentActivity is AndroidX.Lifecycle.ILifecycleOwner maLifecycleOwner)
                 {
                     // if not, this should be sufficient as a fallback
-                    camera = cameraProvider.BindToLifecycle(maLifecycleOwner, cameraSelector, cameraPreview, imageAnalyzer);
+                    camera = cameraProvider.BindToLifecycle(maLifecycleOwner, cameraSelector, cameraPreview, imageAnalyzer, imageCapture);
                 }
             }
+        }
+
+        protected virtual partial void PlatformTakePicture()
+        {
+            imageCapture?.TakePicture(cameraExecutor, imageCallback);
         }
 
         public void UpdateTorch(bool on)
@@ -94,12 +107,12 @@ namespace Luminance.CameraView
 
         public void Focus(Point point)
         {
-
+            //TODO: Implement
         }
 
         public void AutoFocus()
         {
-
+            //TODO: Implement
         }
 
         public void Dispose()

@@ -236,7 +236,12 @@ namespace Luminance.CameraView
 			});
 		}
 
-		public void Dispose()
+        protected virtual partial void PlatformTakePicture()
+        {
+
+        }
+
+        public void Dispose()
 		{
 		}
 	}

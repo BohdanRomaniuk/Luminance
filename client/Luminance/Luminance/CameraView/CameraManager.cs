@@ -7,13 +7,15 @@ namespace Luminance.CameraView
 {
     internal partial class CameraManager : IDisposable
     {
-        public CameraManager(IMauiContext context, CameraLocation cameraLocation)
+        public CameraManager(IMauiContext context, CameraLocation cameraLocation, ICameraView cameraView)
         {
             Context = context;
             CameraLocation = cameraLocation;
+            CameraView = cameraView;
         }
 
         protected readonly IMauiContext Context;
+        protected readonly ICameraView CameraView;
         public event EventHandler<CameraFrameBufferEventArgs> FrameReady;
 
         public CameraLocation CameraLocation { get; private set; }
@@ -27,5 +29,9 @@ namespace Luminance.CameraView
 
         public async Task<bool> CheckPermissions()
             => (await Permissions.RequestAsync<Permissions.Camera>()) == PermissionStatus.Granted;
+
+        public void TakePicture() => PlatformTakePicture();
+
+        protected virtual partial void PlatformTakePicture();
     }
 }

@@ -12,17 +12,18 @@ namespace Luminance.CameraView
             [nameof(ICameraView.CameraLocation)] = (handler, virtualView) => handler.cameraManager.UpdateCameraLocation(virtualView.CameraLocation)
         };
 
-        public static CommandMapper<ICameraView, CameraViewHandler> CameraCommandMapper = new()
+        public static CommandMapper<ICameraView, CameraViewHandler> CameraCommandMapper = new(ViewCommandMapper)
         {
             [nameof(ICameraView.Focus)] = MapFocus,
             [nameof(ICameraView.AutoFocus)] = MapAutoFocus,
+            [nameof(ICameraView.Shutter)] = MapShutter,
         };
 
         CameraManager cameraManager;
 
         public event EventHandler<CameraFrameBufferEventArgs> FrameReady;
 
-        public CameraViewHandler() : base(CameraViewMapper)
+        public CameraViewHandler() : base(CameraViewMapper, CameraCommandMapper)
         {
         }
 
@@ -33,7 +34,7 @@ namespace Luminance.CameraView
         protected override NativePlatformCameraPreviewView CreatePlatformView()
         {
             if (cameraManager == null)
-                cameraManager = new(MauiContext, VirtualView?.CameraLocation ?? CameraLocation.Rear);
+                cameraManager = new(MauiContext, VirtualView?.CameraLocation ?? CameraLocation.Rear, VirtualView);
             var v = cameraManager.CreateNativeView();
             return v;
         }
@@ -48,13 +49,13 @@ namespace Luminance.CameraView
             cameraManager.FrameReady += CameraManager_FrameReady;
         }
 
-        void CameraManager_FrameReady(object sender, CameraFrameBufferEventArgs e)
-            => FrameReady?.Invoke(this, e);
+        //void CameraManager_FrameReady(object sender, CameraFrameBufferEventArgs e)
+        //    => FrameReady?.Invoke(this, e);
 
-        //private void CameraManager_FrameReady(object sender, CameraFrameBufferEventArgs e)
-        //{
-        //    VirtualView?.FrameReady(e);
-        //}
+        private void CameraManager_FrameReady(object sender, CameraFrameBufferEventArgs e)
+        {
+            VirtualView?.FrameReady(e);
+        }
 
         protected override void DisconnectHandler(NativePlatformCameraPreviewView nativeView)
         {
@@ -84,5 +85,10 @@ namespace Luminance.CameraView
 
         public static void MapAutoFocus(CameraViewHandler handler, ICameraView cameraBarcodeReaderView, object? parameters)
             => handler.AutoFocus();
+
+        public static void MapShutter(CameraViewHandler handler, ICameraView view, object? arg3)
+        {
+            handler.cameraManager?.TakePicture();
+        }
     }
 }

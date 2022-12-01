@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Luminance.CameraView
+﻿namespace Luminance.CameraView
 {
     public partial class CameraView : View, ICameraView
     {
         public event EventHandler<CameraFrameBufferEventArgs> FrameReady;
+
+        public event EventHandler<MediaCapturedEventArgs> MediaCaptured;
 
         void ICameraFrameAnalyzer.FrameReady(CameraFrameBufferEventArgs e)
             => FrameReady?.Invoke(this, e);
@@ -31,6 +27,8 @@ namespace Luminance.CameraView
             set => SetValue(CameraLocationProperty, value);
         }
 
+        public void Shutter() => StrongHandler?.Invoke(nameof(Shutter), EventArgs.Empty);
+
         public void AutoFocus()
             => StrongHandler?.Invoke(nameof(AutoFocus), null);
 
@@ -39,5 +37,15 @@ namespace Luminance.CameraView
 
         CameraViewHandler StrongHandler
             => Handler as CameraViewHandler;
+
+        public void OnMediaCaptured(Stream imageData)
+        {
+            MediaCaptured?.Invoke(this, new MediaCapturedEventArgs(imageData));
+        }
+
+        public void OnMediaCapturedFailed()
+        {
+            
+        }
     }
 }

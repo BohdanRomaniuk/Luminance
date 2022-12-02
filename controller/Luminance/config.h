@@ -16,8 +16,8 @@
 #define APPLICATION_NAME "Luminance"
 #define ACESS_POINT_PASS "12345678"
 
-#define OPEN_WIFI_SSID "Oasis 2.0 Guest"
-#define OPEN_WIFI_PASS "789456123"
+#define OPEN_WIFI_SSID "Oasis 2.0"
+#define OPEN_WIFI_PASS ""
 
 #define LED_PIN 22
 #define LED_TYPE WS2812
@@ -28,6 +28,6 @@
 
 #define WEB_SERVER_PORT 81
 #define UDP_SERVER_PORT 8888
-#define UDP_PACKET_SIZE 30
+#define UDP_PACKET_SIZE 9
 
 #endif

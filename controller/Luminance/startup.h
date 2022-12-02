@@ -9,6 +9,8 @@
 class Startup {
 private:
   IPAddress appIpAdress;
+  WiFiUDP* _udp;
+  byte _udpBuffer[UDP_PACKET_SIZE];
   Effects* _effects;
 
   IPAddress setupAcessPoint();
@@ -17,6 +19,7 @@ public:
   Startup(Effects* effects);
 
   void onStartup();
+  void udpBroadcast();
 };
 
 #endif

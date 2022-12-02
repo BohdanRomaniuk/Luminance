@@ -2,8 +2,7 @@
 
 LedController::LedController() {
   _server = new WebServer(WEB_SERVER_PORT);
-  _udp = new WiFiUDP();
-
+  
   _server->on("/", HTTP_GET, std::bind(&LedController::getAppInfo, this));
   _server->on("/api/getAppInfo", HTTP_GET, std::bind(&LedController::getAppInfo, this));
   _server->on("/api/setBrightness", HTTP_POST, std::bind(&LedController::setBrightness, this));
@@ -14,36 +13,10 @@ LedController::LedController() {
 
 void LedController::startServer() {
   _server->begin();
-  _udp->begin(UDP_SERVER_PORT);
 }
 
 void LedController::loop() {
   _server->handleClient();
-  parseUdp();
-}
-
-void LedController::parseUdp() {
-  if (_udp->parsePacket()) {
-    int n = _udp->read(_udpBuffer, UDP_PACKET_SIZE);
-    LOG(n);
-    _udpBuffer[n] = 0;
-    if (_udpBuffer[0] != 'L') {
-      return;
-    }
-
-    byte answ[10];
-    delay(200);
-    answ[0] = 0;
-    answ[1] = 199;
-    udpReply(answ, 10);
-    LOG("REPLIED");
-  }
-}
-
-void LedController::udpReply(byte* data, byte size) {
-  _udp->beginPacket(_udp->remoteIP(), _udp->remotePort());
-  _udp->write(data, size);
-  _udp->endPacket();
 }
 
 Effects* LedController::getEffects() {

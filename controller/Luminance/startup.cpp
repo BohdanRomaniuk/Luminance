@@ -2,6 +2,7 @@
 
 Startup::Startup(Effects* effects)
 {
+  _udp = new WiFiUDP();
   _effects = effects;
 }
 
@@ -23,6 +24,7 @@ void Startup::onStartup()
 #endif
   
   LOG(appIpAdress);
+  _udp->begin(UDP_SERVER_PORT);
 }
 
 IPAddress Startup::setupAcessPoint() {
@@ -58,4 +60,22 @@ IPAddress Startup::setupStationMode() {
   LOG("Failed connecting to Wifi");
 
   return setupAcessPoint();
+}
+
+void Startup::udpBroadcast() {
+  if (_udp->parsePacket()) {
+    int received = _udp->read(_udpBuffer, UDP_PACKET_SIZE);
+    if (received <= 0 || _udpBuffer[0] != 'L' || _udpBuffer[1] != 'u' || _udpBuffer[2] != 'm') {
+      return;
+    }
+
+    byte response[4];
+    response[0] = appIpAdress[0];
+    response[1] = appIpAdress[1];
+    response[2] = appIpAdress[2];
+    response[3] = appIpAdress[3];
+    _udp->beginPacket(_udp->remoteIP(), _udp->remotePort());
+    _udp->write(response, 4);
+    _udp->endPacket();
+  }
 }

@@ -15,8 +15,6 @@ private:
   CRGB _leds[LED_MAX];
   CLEDController* _strip;
   WebServer* _server;
-  WiFiUDP* _udp;
-  byte _udpBuffer[UDP_PACKET_SIZE];
   TernaryPattern* _pattern;
   Effects* _effects;
 
@@ -27,9 +25,6 @@ private:
   void startMapping();
   void getFrame();
   void onNotFound();
-
-  void parseUdp();
-  void udpReply(byte* data, byte size);
 public:
   LedController();
   void startServer();

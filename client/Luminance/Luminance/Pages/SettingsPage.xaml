@@ -22,9 +22,16 @@
 
         <Label Text="Маска підмережі" Grid.Row="1" />
         <Entry Text="{Binding SubnetMask}" Grid.Row="1"  Grid.Column="1"   />
-        
+
         <Label Text="Адреса гірлянди" Grid.Row="2" />
-        <Picker ItemsSource="{Binding Addreses}" SelectedItem="{Binding SelectedAddress}" Grid.Row="2" Grid.Column="1" />
+        <Grid Grid.Row="2" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Picker ItemsSource="{Binding Addreses}" SelectedItem="{Binding SelectedAddress}" />
+            <Button Text="🔎︎" Command="{Binding SearchCommand}" Grid.Column="1" />
+        </Grid>
         
         <Label Text="Живлення" Grid.Row="3" />
         <Switch IsToggled="{Binding IsTurnedOn}" Grid.Row="3" Grid.Column="1" />

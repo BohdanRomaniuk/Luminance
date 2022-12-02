@@ -17,7 +17,7 @@
 #define ACESS_POINT_PASS "12345678"
 
 #define OPEN_WIFI_SSID "Oasis 2.0"
-#define OPEN_WIFI_PASS ""
+#define OPEN_WIFI_PASS "Fx#75syalp71"
 
 #define LED_PIN 22
 #define LED_TYPE WS2812
@@ -28,6 +28,7 @@
 
 #define WEB_SERVER_PORT 81
 #define UDP_SERVER_PORT 8888
-#define UDP_PACKET_SIZE 9
+#define UPD_SECRET_KEY "Luminance"
+#define UPD_SECRET_KEY_LENGTH 9
 
 #endif

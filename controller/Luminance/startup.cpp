@@ -1,13 +1,11 @@
 #include "startup.h"
 
-Startup::Startup(Effects* effects)
-{
+Startup::Startup(Effects* effects) {
   _udp = new WiFiUDP();
   _effects = effects;
 }
 
-void Startup::onStartup()
-{
+void Startup::onStartup() {
   LOG("App starting...");
 #ifdef SKIP_CAPTIVE_PORTAL
   strcpy(captivePortalConfig.SSID, OPEN_WIFI_SSID);
@@ -15,14 +13,14 @@ void Startup::onStartup()
   appIpAdress = setupStationMode();
 #else
   startCaptivePortal();
-  while(!isCaptivePortalConfigured()) // Waiting for user interaction
+  while (!isCaptivePortalConfigured())  // Waiting for user interaction
   {
     _effects->fader(CRGB::Cyan);
   }
 
   appIpAdress = isAccessPoint() ? setupAcessPoint() : setupStationMode();
 #endif
-  
+
   LOG(appIpAdress);
   _udp->begin(UDP_SERVER_PORT);
 }
@@ -64,18 +62,27 @@ IPAddress Startup::setupStationMode() {
 
 void Startup::udpBroadcast() {
   if (_udp->parsePacket()) {
-    int received = _udp->read(_udpBuffer, UDP_PACKET_SIZE);
-    if (received <= 0 || _udpBuffer[0] != 'L' || _udpBuffer[1] != 'u' || _udpBuffer[2] != 'm') {
+    int received = _udp->read(_udpBuffer, UPD_SECRET_KEY_LENGTH);
+    if (received != UPD_SECRET_KEY_LENGTH || !isAuthorized()) {
       return;
     }
 
-    byte response[4];
-    response[0] = appIpAdress[0];
-    response[1] = appIpAdress[1];
-    response[2] = appIpAdress[2];
-    response[3] = appIpAdress[3];
+    _udpResponse[0] = appIpAdress[0];
+    _udpResponse[1] = appIpAdress[1];
+    _udpResponse[2] = appIpAdress[2];
+    _udpResponse[3] = appIpAdress[3];
     _udp->beginPacket(_udp->remoteIP(), _udp->remotePort());
-    _udp->write(response, 4);
+    _udp->write(_udpResponse, 4);
     _udp->endPacket();
   }
+}
+
+bool Startup::isAuthorized() {
+  for (byte i = 0; i < UPD_SECRET_KEY_LENGTH; ++i) {
+    if (_udpBuffer[i] != UPD_SECRET_KEY[i]) {
+      return false;
+    }
+  }
+
+  return true;
 }

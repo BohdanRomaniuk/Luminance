@@ -10,11 +10,14 @@ class Startup {
 private:
   IPAddress appIpAdress;
   WiFiUDP* _udp;
-  byte _udpBuffer[UDP_PACKET_SIZE];
+  byte _udpBuffer[UPD_SECRET_KEY_LENGTH];
+  byte _udpResponse[4];
   Effects* _effects;
 
   IPAddress setupAcessPoint();
   IPAddress setupStationMode();
+
+  bool isAuthorized();
 public:
   Startup(Effects* effects);
 

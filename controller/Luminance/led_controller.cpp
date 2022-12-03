@@ -63,6 +63,11 @@ void LedController::getAppInfo(AsyncWebServerRequest *request) {
 }
 
 void LedController::setBrightness(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
+  if (len == 0) {
+    request->send(200, "application/json", "{\"success\":false}");
+    return;
+  }
+
   StaticJsonDocument<30> jsonDocument;
   deserializeJson(jsonDocument, (const char*)data);
   uint8_t brightnessValue = constrain(jsonDocument["brightness"], 0, 255);

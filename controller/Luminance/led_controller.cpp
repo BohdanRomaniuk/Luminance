@@ -2,13 +2,11 @@
 
 LedController::LedController() {
   _server = new AsyncWebServer(WEB_SERVER_PORT);
-  
+
   _server->on("/", HTTP_GET, std::bind(&LedController::getAppInfo, this, std::placeholders::_1));
   _server->on("/api/getAppInfo", HTTP_GET, std::bind(&LedController::getAppInfo, this, std::placeholders::_1));
-  _server->on("/api/setBrightness", HTTP_POST,[](AsyncWebServerRequest * request){}, NULL, std::bind(&LedController::setBrightness, this,
-                  std::placeholders::_1, std::placeholders::_2,
-                  std::placeholders::_3, std::placeholders::_4,
-                  std::placeholders::_5));
+  _server->on(
+    "/api/setBrightness", HTTP_POST, [](AsyncWebServerRequest *request) {}, NULL, std::bind(&LedController::setBrightness, this, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5));
   _server->on("/api/startMapping", HTTP_GET, std::bind(&LedController::startMapping, this, std::placeholders::_1));
   _server->on("/api/getFrame", HTTP_GET, std::bind(&LedController::getFrame, this, std::placeholders::_1));
   _server->onNotFound(std::bind(&LedController::onNotFound, this, std::placeholders::_1));
@@ -18,7 +16,7 @@ void LedController::startServer() {
   _server->begin();
 }
 
-Effects* LedController::getEffects() {
+Effects *LedController::getEffects() {
   return _effects;
 }
 
@@ -30,8 +28,6 @@ void LedController::initStrip() {
   }
   _strip->setLeds(_leds, LED_MAX);
   _strip->clearLedData();
-  //_effects->fader(CRGB::Orange);
-  //_strip->showLeds(255);
 }
 
 void LedController::showFrame(int id) {
@@ -64,7 +60,7 @@ void LedController::getAppInfo(AsyncWebServerRequest *request) {
 
 void LedController::setBrightness(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
   StaticJsonDocument<30> jsonDocument;
-  deserializeJson(jsonDocument, (const char*)data);
+  deserializeJson(jsonDocument, (const char *)data);
   uint8_t brightnessValue = constrain(jsonDocument["brightness"], 0, 255);
 
   _strip->showLeds(brightnessValue);
@@ -78,7 +74,7 @@ void LedController::startMapping(AsyncWebServerRequest *request) {
   StaticJsonDocument<JSON_ARRAY_SIZE(LED_MAX + 1)> data;
   JsonArray array = data.to<JsonArray>();
   array.add(_pattern->getPatternLength());
-  int* result = _pattern->getPatternDecimal();
+  int *result = _pattern->getPatternDecimal();
   for (int i = 0; i < LED_MAX; ++i) {
     array.add(result[i]);
   }

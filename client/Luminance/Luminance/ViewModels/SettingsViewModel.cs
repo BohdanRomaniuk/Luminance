@@ -1,22 +1,20 @@
-﻿using Android.Locations;
-using Luminance.Helpers;
+﻿using Luminance.Helpers;
 using Luminance.Managers;
+using Luminance.Managers.Interfaces;
+using Luminance.Services;
+using Luminance.Services.Interfaces;
 using Luminance.ViewModels.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Net.NetworkInformation;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using static Android.Provider.ContactsContract.CommonDataKinds;
+using System.Windows.Input;
 
 namespace Luminance.ViewModels
 {
     public sealed class SettingsViewModel : BaseViewModel
     {
-        private NetworkManager _networkManager;
+        private readonly INetworkManager _networkManager;
+        private readonly IUdpService _udpService;
+
+        private ICommand _searchCommand;
 
         public string AppIpAddress { get; set; }
         public string SubnetMask { get; set; }
@@ -27,10 +25,13 @@ namespace Luminance.ViewModels
         public List<string> Addreses { get; set; }
         public string SelectedAddress { get; set; }
 
+        public ICommand SearchCommand => _searchCommand ??= new Command(FindLocalAddress);
+
 
         public SettingsViewModel()
         {
             _networkManager = new NetworkManager();
+            _udpService = new UdpService();
 
             IsTurnedOn = true;
             SubnetMask = "255.255.255.0";
@@ -44,51 +45,27 @@ namespace Luminance.ViewModels
             AppIpAddress = _networkManager.GetApplicationIp();
             var ipv4 = IPAddress.Parse(AppIpAddress);
             var mask = IPAddress.Parse(SubnetMask);
-            var networkAddress = ipv4.GetBroadcastAddress(mask);
-
-            try
-            {
-                int PORT = 8888;
-                UdpClient udpClient = new UdpClient();
-                udpClient.Client.Bind(new IPEndPoint(IPAddress.Any, PORT));
-
-                var from = new IPEndPoint(0, 0);
-                var task = Task.Run(() =>
-                {
-                    while (true)
-                    {
-                        var recvBuffer = udpClient.Receive(ref from);
-                        Console.WriteLine(Encoding.UTF8.GetString(recvBuffer));
-                    }
-                });
-
-                var data = Encoding.UTF8.GetBytes("LUMINANCE");
-                udpClient.Send(data, data.Length, mask.ToString(), PORT);
-                var recvBuffer = udpClient.Receive(ref from);
-                //task.Wait();
-            }
-            catch (Exception ex)
-            {
-
-            }
-
-
-            Addreses = new List<string>();
-            var ping = new Ping();
-            var baseAddress = "192.168.1.";
-            for (int i = 0; i < 254; ++i)
-            {
-                var url = $"{baseAddress}{i}";
-                if (IsActiveHost(url))
-                {
-                    Addreses.Add(url);
-                }
-            }
-
+            var broadcast = ipv4.GetBroadcastAddress(mask);
+            var controller = _udpService.GetLuminanceControllerIp(broadcast);
+            Addreses = new List<string>() { controller.ToString() };
             SelectedAddress = Addreses.FirstOrDefault();
 
-            bool IsActiveHost(string url)
-                => ping.Send(url, 20).Status == IPStatus.Success;
+
+            //var ping = new Ping();
+            //var baseAddress = "192.168.1.";
+            //for (int i = 0; i < 254; ++i)
+            //{
+            //    var url = $"{baseAddress}{i}";
+            //    if (IsActiveHost(url))
+            //    {
+            //        Addreses.Add(url);
+            //    }
+            //}
+
+            //SelectedAddress = Addreses.FirstOrDefault();
+
+            //bool IsActiveHost(string url)
+            //    => ping.Send(url, 20).Status == IPStatus.Success;
         }
     }
 }

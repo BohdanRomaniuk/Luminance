@@ -12,7 +12,7 @@
 #define LOG(x)
 #endif
 
-#define APPLICATION_VERSION 0.3
+#define APPLICATION_VERSION 0.5
 #define APPLICATION_NAME "Luminance"
 #define ACESS_POINT_PASS "12345678"
 
@@ -26,7 +26,7 @@
 #define VOLTAGE 5
 #define CURRENT_LIMIT 1000  //Maximum current in mA
 
-#define WEB_SERVER_PORT 81
+#define WEB_SERVER_PORT 80
 #define UDP_SERVER_PORT 8888
 #define UPD_SECRET_KEY "Luminance"
 #define UPD_SECRET_KEY_LENGTH 9

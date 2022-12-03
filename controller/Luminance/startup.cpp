@@ -74,6 +74,8 @@ void Startup::udpBroadcast() {
     _udp->beginPacket(_udp->remoteIP(), _udp->remotePort());
     _udp->write(_udpResponse, 4);
     _udp->endPacket();
+    
+    LOG("Broadcast reply send");
   }
 }
 

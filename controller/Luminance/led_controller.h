@@ -3,8 +3,9 @@
 
 #include <FastLED.h>
 #include <WiFi.h>
-#include <WiFiUdp.h>
-#include <WebServer.h>
+#include <AsyncTCP.h>
+#include <AsyncJson.h>
+#include <ESPAsyncWebServer.h>
 #include <ArduinoJson.h>
 #include "config.h"
 #include "ternary_pattern.h"
@@ -14,17 +15,17 @@ class LedController {
 private:
   CRGB _leds[LED_MAX];
   CLEDController* _strip;
-  WebServer* _server;
+  AsyncWebServer * _server;
   TernaryPattern* _pattern;
   Effects* _effects;
 
   void showFrame(int id);
 
-  void getAppInfo();
-  void setBrightness();
-  void startMapping();
-  void getFrame();
-  void onNotFound();
+  void getAppInfo(AsyncWebServerRequest *request);
+  void setBrightness(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total);
+  void startMapping(AsyncWebServerRequest *request);
+  void getFrame(AsyncWebServerRequest *request);
+  void onNotFound(AsyncWebServerRequest *request);
 public:
   LedController();
   void startServer();

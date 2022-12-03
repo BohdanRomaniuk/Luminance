@@ -1,22 +1,21 @@
 #include "led_controller.h"
 
 LedController::LedController() {
-  _server = new WebServer(WEB_SERVER_PORT);
+  _server = new AsyncWebServer(WEB_SERVER_PORT);
   
-  _server->on("/", HTTP_GET, std::bind(&LedController::getAppInfo, this));
-  _server->on("/api/getAppInfo", HTTP_GET, std::bind(&LedController::getAppInfo, this));
-  _server->on("/api/setBrightness", HTTP_POST, std::bind(&LedController::setBrightness, this));
-  _server->on("/api/startMapping", HTTP_GET, std::bind(&LedController::startMapping, this));
-  _server->on("/api/getFrame", HTTP_GET, std::bind(&LedController::getFrame, this));
-  _server->onNotFound(std::bind(&LedController::onNotFound, this));
+  _server->on("/", HTTP_GET, std::bind(&LedController::getAppInfo, this, std::placeholders::_1));
+  _server->on("/api/getAppInfo", HTTP_GET, std::bind(&LedController::getAppInfo, this, std::placeholders::_1));
+  _server->on("/api/setBrightness", HTTP_POST,[](AsyncWebServerRequest * request){}, NULL, std::bind(&LedController::setBrightness, this,
+                  std::placeholders::_1, std::placeholders::_2,
+                  std::placeholders::_3, std::placeholders::_4,
+                  std::placeholders::_5));
+  _server->on("/api/startMapping", HTTP_GET, std::bind(&LedController::startMapping, this, std::placeholders::_1));
+  _server->on("/api/getFrame", HTTP_GET, std::bind(&LedController::getFrame, this, std::placeholders::_1));
+  _server->onNotFound(std::bind(&LedController::onNotFound, this, std::placeholders::_1));
 }
 
 void LedController::startServer() {
   _server->begin();
-}
-
-void LedController::loop() {
-  _server->handleClient();
 }
 
 Effects* LedController::getEffects() {
@@ -53,32 +52,26 @@ void LedController::showFrame(int id) {
   _strip->showLeds(LED_MAX);
 }
 
-void LedController::getAppInfo() {
+void LedController::getAppInfo(AsyncWebServerRequest *request) {
   DynamicJsonDocument data(100);
   data["version"] = APPLICATION_VERSION;
   data["name"] = APPLICATION_NAME;
   String response;
   serializeJson(data, response);
 
-  _server->send(200, "application/json", response);
+  request->send(200, "application/json", response);
 }
 
-void LedController::setBrightness() {
-  if (_server->hasArg("plain") == false) {
-    _server->send(200, "application/json", "{\"success\":false}");
-    return;
-  }
-
-  String body = _server->arg("plain");
+void LedController::setBrightness(AsyncWebServerRequest *request, uint8_t *data, size_t len, size_t index, size_t total) {
   StaticJsonDocument<30> jsonDocument;
-  deserializeJson(jsonDocument, body);
+  deserializeJson(jsonDocument, (const char*)data);
   uint8_t brightnessValue = constrain(jsonDocument["brightness"], 0, 255);
 
   _strip->showLeds(brightnessValue);
-  _server->send(200, "application/json", "{\"success\":true}");
+  request->send(200, "application/json", "{\"success\":true}");
 }
 
-void LedController::startMapping() {
+void LedController::startMapping(AsyncWebServerRequest *request) {
   _pattern = new TernaryPattern(LED_MAX);
   showFrame(0);
 
@@ -92,20 +85,20 @@ void LedController::startMapping() {
 
   String response;
   serializeJson(data, response);
-  _server->send(200, "application/json", response);
+  request->send(200, "application/json", response);
 }
 
-void LedController::getFrame() {
-  int id = _server->arg("id") == "" ? -1 : _server->arg("id").toInt();
+void LedController::getFrame(AsyncWebServerRequest *request) {
+  int id = !request->hasArg("id") ? -1 : request->arg("id").toInt();
   if (_pattern == nullptr || id < 0 || id >= _pattern->getPatternLength()) {
-    _server->send(200, "application/json", "{\"success\":false}");
+    request->send(200, "application/json", "{\"success\":false}");
     return;
   }
 
   showFrame(id);
-  _server->send(200, "application/json", "{\"success\":true}");
+  request->send(200, "application/json", "{\"success\":true}");
 }
 
-void LedController::onNotFound() {
-  _server->send(404, "application/json", "{\"message\":\"Not Found\"}");
+void LedController::onNotFound(AsyncWebServerRequest *request) {
+  request->send(404, "application/json", "{\"message\":\"Not Found\"}");
 }

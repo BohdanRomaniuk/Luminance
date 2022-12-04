@@ -15,13 +15,23 @@ namespace Luminance.ViewModels
         private readonly IUdpService _udpService;
         private readonly IRestService _restService;
 
+        private int _brightness;
+
         private ICommand _searchCommand;
 
         public string AppIpAddress { get; set; }
         public string SubnetMask { get; set; }
         public bool IsTurnedOn { get; set; }
         public int MaxBrightness => 255;
-        public int Brightness { get; set; }
+        public int Brightness
+        {
+            get => _brightness;
+            set
+            {
+                _brightness = value;
+                Task.Run(async () => await ChangeBrightness(value));
+            }
+        }
         public int BrightnessPercents => Brightness * 100 / MaxBrightness;
         public List<string> Addreses { get; set; }
         public string SelectedAddress { get; set; }
@@ -38,7 +48,7 @@ namespace Luminance.ViewModels
 
             IsTurnedOn = true;
             SubnetMask = "255.255.255.0";
-            Brightness = 255;
+            //Brightness = 255;
             GetApplicationAddress();
             Task.Run(FindLocalAddress);
         }
@@ -63,7 +73,7 @@ namespace Luminance.ViewModels
                 if (controller != IPAddress.Any)
                 {
                     _restService.SetBaseAddress(controller);
-                    var appInfo = await _restService.GetApplicationInfo();
+                    var appInfo = await _restService.GetApplicationInfoAsync();
                     AppInfo = appInfo?.ToString();
                 }
                 else
@@ -75,6 +85,11 @@ namespace Luminance.ViewModels
             {
                 ex.Report();
             }
+        }
+
+        private async Task ChangeBrightness(int value)
+        {
+            var result = await _restService.SetBrightnessAsync(value);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Luminance.Services.Interfaces;
+﻿using Luminance.Helpers;
+using Luminance.Services.Interfaces;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
@@ -26,7 +27,7 @@ namespace Luminance.Services
             }
             catch (Exception ex)
             {
-                //TODO: Log exception
+                ex.Report();
 
                 return result.Address;
             }

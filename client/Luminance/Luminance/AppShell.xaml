@@ -25,6 +25,6 @@
         <ShellContent
             Title="Створоти"
             Icon="magic_wand"
-            ContentTemplate="{DataTemplate pages:GalleryPage}" />
+            ContentTemplate="{DataTemplate pages:CreatePage}" />
     </TabBar>
 </Shell>

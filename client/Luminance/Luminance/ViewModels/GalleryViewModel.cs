@@ -2,7 +2,7 @@
 
 namespace Luminance.ViewModels
 {
-    public class MappingViewModel : BaseViewModel
+    public class GalleryViewModel : BaseViewModel
     {
     }
 }

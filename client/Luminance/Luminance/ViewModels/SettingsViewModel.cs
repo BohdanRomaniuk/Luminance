@@ -13,6 +13,7 @@ namespace Luminance.ViewModels
     {
         private readonly INetworkManager _networkManager;
         private readonly IUdpService _udpService;
+        private readonly IRestService _restService;
 
         private ICommand _searchCommand;
 
@@ -24,48 +25,56 @@ namespace Luminance.ViewModels
         public int BrightnessPercents => Brightness * 100 / MaxBrightness;
         public List<string> Addreses { get; set; }
         public string SelectedAddress { get; set; }
+        public string AppInfo { get; set; }
 
-        public ICommand SearchCommand => _searchCommand ??= new Command(FindLocalAddress);
+        public ICommand SearchCommand => _searchCommand ??= new Command(async () => await FindLocalAddress());
 
 
         public SettingsViewModel()
         {
             _networkManager = new NetworkManager();
             _udpService = new UdpService();
+            _restService = new RestService();
 
             IsTurnedOn = true;
             SubnetMask = "255.255.255.0";
             Brightness = 255;
-            FindLocalAddress();
+            GetApplicationAddress();
+            Task.Run(FindLocalAddress);
         }
 
-
-        private void FindLocalAddress()
+        private void GetApplicationAddress()
         {
             AppIpAddress = _networkManager.GetApplicationIp();
-            var ipv4 = IPAddress.Parse(AppIpAddress);
-            var mask = IPAddress.Parse(SubnetMask);
-            var broadcast = ipv4.GetBroadcastAddress(mask);
-            var controller = _udpService.GetLuminanceControllerIp(broadcast);
-            Addreses = new List<string>() { controller.ToString() };
-            SelectedAddress = Addreses.FirstOrDefault();
+        }
 
-
-            //var ping = new Ping();
-            //var baseAddress = "192.168.1.";
-            //for (int i = 0; i < 254; ++i)
-            //{
-            //    var url = $"{baseAddress}{i}";
-            //    if (IsActiveHost(url))
-            //    {
-            //        Addreses.Add(url);
-            //    }
-            //}
-
-            //SelectedAddress = Addreses.FirstOrDefault();
-
-            //bool IsActiveHost(string url)
-            //    => ping.Send(url, 20).Status == IPStatus.Success;
+        private async Task FindLocalAddress()
+        {
+            try
+            {
+                AppInfo = "Пошук";
+                
+                var ipv4 = IPAddress.Parse(AppIpAddress);
+                var mask = IPAddress.Parse(SubnetMask);
+                var broadcast = ipv4.GetBroadcastAddress(mask);
+                var controller = _udpService.GetLuminanceControllerIp(broadcast);
+                Addreses = new List<string>() { controller.ToString() };
+                SelectedAddress = Addreses.FirstOrDefault();
+                if (controller != IPAddress.Any)
+                {
+                    _restService.SetBaseAddress(controller);
+                    var appInfo = await _restService.GetApplicationInfo();
+                    AppInfo = appInfo?.ToString();
+                }
+                else
+                {
+                    AppInfo = "Не знайдено";
+                }
+            }
+            catch (Exception ex)
+            {
+                ex.Report();
+            }
         }
     }
 }

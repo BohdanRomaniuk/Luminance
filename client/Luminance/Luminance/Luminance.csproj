@@ -62,17 +62,17 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Models\" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <PackageReference Include="Emgu.CV" Version="4.6.0.5131" />
 	  <PackageReference Include="Emgu.CV.Bitmap" Version="4.6.0.5131" />
 	  <PackageReference Include="Microsoft.Maui.Graphics" Version="6.0.501" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
 	  <PackageReference Include="PropertyChanged.Fody" Version="4.1.0" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <MauiXaml Update="Pages\CreatePage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
 	  <MauiXaml Update="Pages\GalleryPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
@@ -100,6 +100,10 @@
 	  <PackageReference Include="Xamarin.Google.Guava.ListenableFuture">
 	    <Version>1.0.0.10</Version>
 	  </PackageReference>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Controls\" />
 	</ItemGroup>
 
 </Project>

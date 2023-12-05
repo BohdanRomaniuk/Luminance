@@ -1,12 +1,135 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="Luminance.Client.Pages.LedMappingPage"
-             Title="LedMappingPage">
-    <VerticalStackLayout>
-        <Label 
-            Text="Mapping"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+<ContentPage
+    x:Class="Luminance.Client.Pages.LedMappingPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:cam="clr-namespace:Camera.MAUI;assembly=Camera.MAUI"
+    Title="LedMappingPage">
+    <ContentPage.Content>
+        <Grid>
+            <cam:CameraView
+                x:Name="camera"
+                BarCodeDetectionEnabled="False"
+                HorizontalOptions="FillAndExpand"
+                TorchEnabled="False"
+                VerticalOptions="FillAndExpand" />
+
+            <StackLayout
+                x:Name="imgViewPanel"
+                HorizontalOptions="Center"
+                Spacing="0"
+                VerticalOptions="Center">
+                <Frame
+                    Padding="3"
+                    BackgroundColor="White"
+                    HeightRequest="200"
+                    WidthRequest="200">
+                    <StackLayout Spacing="0">
+                        <Image
+                            x:Name="imgView"
+                            Aspect="AspectFit"
+                            Source="img.png" />
+                        <Button Text="Close" VerticalOptions="EndAndExpand" />
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+
+            <StackLayout
+                Padding="4"
+                Spacing="0"
+                VerticalOptions="StartAndExpand">
+                <StackLayout Orientation="Horizontal">
+                    <Button
+                        BackgroundColor="Transparent"
+                        Clicked="SwitchCamera"
+                        Text="🔄️" />
+                    <Button
+                        BackgroundColor="Transparent"
+                        Clicked="Torch"
+                        Text="💡" />
+                    <Label
+                        x:Name="captureMode"
+                        FontSize="14"
+                        HorizontalOptions="EndAndExpand"
+                        Text="Знайдено 98 світлодіодів"
+                        TextColor="Red"
+                        VerticalOptions="Center" />
+                </StackLayout>
+            </StackLayout>
+
+            <StackLayout
+                Padding="6"
+                Spacing="6"
+                VerticalOptions="EndAndExpand">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="0.9*" />
+                        <ColumnDefinition Width="0.1*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Label Text="Поріг" TextColor="Wheat" />
+                    <Slider
+                        Grid.Column="1"
+                        Maximum="255"
+                        Minimum="1" />
+                    <Label
+                        Grid.Column="2"
+                        Text="255"
+                        TextColor="Wheat" />
+
+                    <Label
+                        Grid.Row="1"
+                        Text="Мін."
+                        TextColor="Wheat" />
+                    <Slider
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Maximum="255"
+                        Minimum="1" />
+                    <Label
+                        Grid.Row="1"
+                        Grid.Column="2"
+                        Text="255"
+                        TextColor="Wheat" />
+
+                    <Label
+                        Grid.Row="2"
+                        Text="Макс."
+                        TextColor="Wheat" />
+                    <Slider
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Maximum="255"
+                        Minimum="1" />
+                    <Label
+                        Grid.Row="2"
+                        Grid.Column="2"
+                        Text="255"
+                        TextColor="Wheat" />
+
+                    <Label
+                        Grid.Row="3"
+                        Text="Відст."
+                        TextColor="Wheat" />
+                    <Slider
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Maximum="255"
+                        Minimum="1" />
+                    <Label
+                        Grid.Row="3"
+                        Grid.Column="2"
+                        Text="255"
+                        TextColor="Wheat" />
+                </Grid>
+                <Button Clicked="StartMapping" Text="Почати сканування" />
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
 </ContentPage>

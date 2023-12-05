@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             
-             x:Class="Luminance.Pages.SettingsPage"
-             Title="Налаштування">
+<ContentPage
+    x:Class="Luminance.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Luminance.Controls"
+    Title="Налаштування">
 
-    <Grid >
-        <Grid.ColumnDefinitions>
+    <StackLayout>
+        <controls:TitledLabel Title="Адреса додатку" Text="{Binding AppIpAddress}" />
+        <controls:TitledLabel Title="Маска підмережі" Text="{Binding SubnetMask}" />
+
+    </StackLayout>
+
+
+    <!--<Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
@@ -18,11 +25,6 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Label Text="Адреса додатку" />
-        <Label Text="{Binding AppIpAddress}" Grid.Column="1" />
-
-        <Label Text="Маска підмережі" Grid.Row="1" />
-        <Entry Text="{Binding SubnetMask}" Grid.Row="1"  Grid.Column="1"   />
 
         <Label Text="Адреса гірлянди" Grid.Row="2" />
         <Grid Grid.Row="2" Grid.Column="1">
@@ -38,7 +40,7 @@
 
         <Label Text="Живлення" Grid.Row="4" />
         <Switch IsToggled="{Binding IsTurnedOn}" Grid.Row="3" Grid.Column="1" />
-        
+
         <Label Text="Яскравість" Grid.Row="5" />
         <Grid Grid.Row="4" Grid.Column="1">
             <Grid.ColumnDefinitions>
@@ -47,8 +49,6 @@
             </Grid.ColumnDefinitions>
             <Slider Minimum="1" Maximum="{Binding MaxBrightness}" Value="{Binding Brightness}"  />
             <Label Text="{Binding BrightnessPercents, StringFormat='{0} %'}" Grid.Column="1" />
-        </Grid>
+        </Grid>-->
 
-
-    </Grid>
 </ContentPage>

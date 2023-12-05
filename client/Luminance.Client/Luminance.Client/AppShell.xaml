@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Luminance.Client.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Luminance.Client"
+    xmlns:pages="clr-namespace:Luminance.Client.Pages"
+    Title="Luminance.Client"
+    Shell.FlyoutBehavior="Disabled">
+
+    <TabBar>
+        <ShellContent
+            Title="Налаштування"
+            ContentTemplate="{DataTemplate pages:SettingsPage}"
+            Icon="settings" />
+
+        <ShellContent
+            Title="Cканування"
+            ContentTemplate="{DataTemplate pages:LedMappingPage}"
+            Icon="mapping" />
+
+        <ShellContent
+            Title="Галерея"
+            ContentTemplate="{DataTemplate pages:GalleryPage}"
+            Icon="gallery" />
+
+        <ShellContent
+            Title="Створоти"
+            ContentTemplate="{DataTemplate pages:CreateEffectPage}"
+            Icon="magic_wand" />
+    </TabBar>
+
+</Shell>

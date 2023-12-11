@@ -1,7 +1,6 @@
-﻿using ObjCRuntime;
-using UIKit;
+﻿using UIKit;
 
-namespace MauiApp1
+namespace Luminance.Client
 {
     public class Program
     {

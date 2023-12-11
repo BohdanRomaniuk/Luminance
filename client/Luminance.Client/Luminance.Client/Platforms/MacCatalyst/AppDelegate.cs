@@ -1,6 +1,6 @@
 ﻿using Foundation;
 
-namespace MauiApp1
+namespace Luminance.Client
 {
     [Register("AppDelegate")]
     public class AppDelegate : MauiUIApplicationDelegate

@@ -1,4 +1,5 @@
 ﻿using Camera.MAUI;
+using Luminance.Client.Helpers;
 using Microsoft.Extensions.Logging;
 
 namespace Luminance.Client
@@ -17,8 +18,10 @@ namespace Luminance.Client
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
 
+            PageFactory.Init();
+
 #if DEBUG
-    		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();

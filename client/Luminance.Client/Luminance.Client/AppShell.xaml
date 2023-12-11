@@ -16,7 +16,7 @@
 
         <ShellContent
             Title="Cканування"
-            ContentTemplate="{DataTemplate pages:LedMappingPage}"
+            ContentTemplate="{DataTemplate pages:MappingResultPage}"
             Icon="mapping" />
 
         <ShellContent
